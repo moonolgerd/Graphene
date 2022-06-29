@@ -1,4 +1,5 @@
-import { WebSocketLink } from '@apollo/client/link/ws'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
 import {
     ApolloClient,
     InMemoryCache,
@@ -7,13 +8,9 @@ import {
 } from "@apollo/client"
 import { getMainDefinition } from '@apollo/client/utilities'
 
-const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:5099/graphql/',
-    options: {
-        reconnect: true,
-        lazy: true
-    }
-})
+const wsLink = new GraphQLWsLink(createClient({
+    url: 'ws://localhost:5099/graphql/',
+  }));
 
 const httpLink = new HttpLink({
     uri: 'http://localhost:5099/graphql/'
