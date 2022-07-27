@@ -6,11 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>8f73db1a-1c05-40c8-8863-7fd16a28ec4a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerfileRunArguments>-p 5099:80</DockerfileRunArguments>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.12.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.21.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.0-preview.24" />
+    <PackageReference Include="Okta.AspNetCore" Version="4.2.0" />
   </ItemGroup>
 
 </Project>

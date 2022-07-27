@@ -6,7 +6,19 @@ import {
     HttpLink,
     split,
 } from "@apollo/client"
+import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
+
+const authLink = setContext((_, { headers }) => {
+    const tokenStorage = JSON.parse(localStorage.getItem("okta-token-storage")!)
+    const token = tokenStorage.accessToken.accessToken
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : ''
+        }
+    }
+})
 
 const wsLink = new GraphQLWsLink(createClient({
     url: 'ws://localhost:5099/graphql/',
@@ -29,7 +41,7 @@ const splitLink = split(
 )
 
 const client = new ApolloClient({
-    link: splitLink,
+    link: authLink.concat(splitLink),
     connectToDevTools: true,
     cache: new InMemoryCache()
 })

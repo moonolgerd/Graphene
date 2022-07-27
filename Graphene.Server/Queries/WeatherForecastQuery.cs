@@ -1,4 +1,5 @@
 using Graphene.Server.Models;
+using HotChocolate.AspNetCore.Authorization;
 
 namespace Graphene.Server.Queries;
 
@@ -14,5 +15,10 @@ public class WeatherForecastQuery
         this.logger = logger;
     }
 
-    public IEnumerable<WeatherForecast> GetWeatherForecast() => weatherForecastRepository.GetWeatherForecasts();
+    [Authorize]
+    public IEnumerable<WeatherForecast> GetWeatherForecast()
+    {
+        logger.LogInformation("Getting weather forecasts");
+        return weatherForecastRepository.GetWeatherForecasts();
+    }
 }

@@ -2,6 +2,9 @@ using Graphene.Server.Models;
 using Graphene.Server.Mutations;
 using Graphene.Server.Queries;
 using Graphene.Server.Subscriptions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Okta.AspNetCore;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +13,30 @@ var services = builder.Services;
 
 services.AddSingleton<WeatherForecastRepository>();
 
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+})
+    .AddOktaWebApi(new OktaWebApiOptions()
+    {
+        OktaDomain = builder.Configuration["Authentication:Okta:OktaDomain"],
+        AuthorizationServerId = "default",
+        Audience = "api://default"
+    });
+
+
+services.AddAuthorization(options =>
+{
+    options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+    {
+        policy.RequireClaim(ClaimTypes.Name);
+    });
+});
+
 services.AddGraphQLServer()
+    .AddAuthorization()
     .AddQueryType<WeatherForecastQuery>()
     .AddMutationType<WeatherForecastMutation>()
     .AddSubscriptionType<WeatherForecastSubscription>();
@@ -32,6 +58,9 @@ app.UseWebSockets()
     .UseRouting();
 
 app.UseCors("AllowAll");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGraphQL();
 
