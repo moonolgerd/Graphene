@@ -21,11 +21,11 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://localhost:5099/graphql/',
+    url: 'wss://localhost:7099/graphql/',
   }));
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:5099/graphql/'
+    uri: 'https://localhost:7099/graphql/'
 })
 
 const splitLink = split(

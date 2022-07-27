@@ -1,3 +1,4 @@
+using Graphene.Server;
 using Graphene.Server.Models;
 using Graphene.Server.Mutations;
 using Graphene.Server.Queries;
@@ -36,6 +37,7 @@ services.AddAuthorization(options =>
 });
 
 services.AddGraphQLServer()
+    .AddHttpRequestInterceptor<HttpRequestInterceptor>()
     .AddAuthorization()
     .AddQueryType<WeatherForecastQuery>()
     .AddMutationType<WeatherForecastMutation>()
