@@ -9,8 +9,8 @@ import Home from './components/Home'
 import { RequiredAuth } from './components/SecureRoute'
 
 export const oktaAuth = new OktaAuth({
-    issuer: process.env.REACT_APP_OKTA_ISSUER,
-    clientId: process.env.REACT_APP_OKTA_CLIENTID,
+    issuer: import.meta.env.VITE_OKTA_ISSUER,
+    clientId: import.meta.env.VITE_OKTA_CLIENTID,
     redirectUri: `${window.location.origin}/login/callback`,
 })
 
@@ -26,8 +26,8 @@ const App = () => {
     //})
 
     const restoreOriginalUri = async (_oktaAuth: OktaAuth, originalUri: string) => {
-        navigate(toRelativeUrl(originalUri || '/', window.location.origin));
-    };
+        navigate(toRelativeUrl(originalUri || '/', window.location.origin))
+    }
 
     const login = async () => await oktaAuth.signInWithRedirect({ originalUri: "/" })
     const logout = async () => await oktaAuth.signOut()
@@ -48,7 +48,7 @@ const App = () => {
             </div>
             <button onClick={login}>Login</button>
             <Routes>
-                <Route path="/" element={ <Home /> } />
+                <Route path="/" element={<Home />} />
                 <Route path="/weatherForecast" element={<RequiredAuth />}>
                     <Route path="" element={<WeatherForecast />} />
                 </Route>
