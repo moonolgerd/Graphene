@@ -1,5 +1,1 @@
-const Home = () => {
-    return <p>Home</p>
-}
-
-export default Home
+export const Home = () => <p>Home</p>

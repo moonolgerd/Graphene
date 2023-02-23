@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import { useOktaAuth } from '@okta/okta-react'
 import { toRelativeUrl } from '@okta/okta-auth-js'
 import { Outlet } from 'react-router-dom'
-import Loading from './Loading'
+import { Loading } from './Loading'
 
 export const RequiredAuth = () => {
     const { oktaAuth, authState } = useOktaAuth()
 
     useEffect(() => {
         if (!authState) {
-            return;
+            return
         }
 
         if (!authState?.isAuthenticated) {

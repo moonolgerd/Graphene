@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
 import './App.css'
 import WeatherForecast from './components/Forecast'
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js'
 import { Security, useOktaAuth, LoginCallback } from '@okta/okta-react'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
-import Loading from './components/Loading'
-import Home from './components/Home'
+import { Loading } from './components/Loading'
+import { Home } from './components/Home'
 import { RequiredAuth } from './components/SecureRoute'
 
 export const oktaAuth = new OktaAuth({

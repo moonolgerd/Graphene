@@ -55,7 +55,7 @@ export interface NewForecastEvent {
 const WeatherForecast = () => {
   const { loading, error, data, subscribeToMore } = useQuery<WeatherForecastData>(FORECASTS)
 
-  if (error !== undefined) {
+  if (error) {
     console.error(error)
   }
 
@@ -96,7 +96,7 @@ const WeatherForecast = () => {
 
   const renderForecastsTable = (forecasts?: Forecast[]) => {
 
-    if (forecasts === undefined)
+    if (!forecasts)
       return <h2>No data</h2>
 
     return (
