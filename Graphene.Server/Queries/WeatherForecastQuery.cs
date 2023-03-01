@@ -1,8 +1,9 @@
 using Graphene.Server.Models;
-using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Authorization;
 
 namespace Graphene.Server.Queries;
 
+[QueryType]
 public class WeatherForecastQuery
 {
     private readonly WeatherForecastRepository weatherForecastRepository;

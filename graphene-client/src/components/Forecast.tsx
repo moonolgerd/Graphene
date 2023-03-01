@@ -87,7 +87,7 @@ const WeatherForecast = () => {
     const newForecast: ForecastInput = {
       date: date,
       summary: 'Freezing',
-      temperatureC: -20
+      temperatureC: Math.round(Math.random() * 100)
     }
     sendForecast({
       variables: { forecast: newForecast }

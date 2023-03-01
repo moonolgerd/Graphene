@@ -1,9 +1,10 @@
 using Graphene.Server.Models;
-using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
 
 namespace Graphene.Server.Mutations;
 
+[MutationType]
 public class WeatherForecastMutation
 {
     private readonly WeatherForecastRepository weatherForecastRepository;

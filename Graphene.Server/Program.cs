@@ -1,8 +1,5 @@
 using Graphene.Server;
 using Graphene.Server.Models;
-using Graphene.Server.Mutations;
-using Graphene.Server.Queries;
-using Graphene.Server.Subscriptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Okta.AspNetCore;
 using System.Security.Claims;
@@ -12,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var services = builder.Services;
 
+services.AddMemoryCache();
+
+services.AddHostedService<BackgroundHostedService>();
 services.AddSingleton<WeatherForecastRepository>();
 
 services.AddAuthentication(options =>
@@ -39,11 +39,8 @@ services.AddAuthorization(options =>
 services.AddGraphQLServer()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
     .AddAuthorization()
-    .AddQueryType<WeatherForecastQuery>()
-    .AddMutationType<WeatherForecastMutation>()
-    .AddSubscriptionType<WeatherForecastSubscription>();
-
-services.AddInMemorySubscriptions();
+    .AddTypes()
+    .AddInMemorySubscriptions();
 
 services.AddCors(options =>
 {
