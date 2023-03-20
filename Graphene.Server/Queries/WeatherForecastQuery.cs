@@ -4,19 +4,19 @@ using HotChocolate.Authorization;
 namespace Graphene.Server.Queries;
 
 [QueryType]
+[Authorize]
 public class WeatherForecastQuery
 {
-    private readonly WeatherForecastRepository weatherForecastRepository;
+    private readonly IWeatherForecastRepository weatherForecastRepository;
     private readonly ILogger<WeatherForecastQuery> logger;
 
-    public WeatherForecastQuery(WeatherForecastRepository weatherForecastRepository,
+    public WeatherForecastQuery(IWeatherForecastRepository weatherForecastRepository,
         ILogger<WeatherForecastQuery> logger)
     {
         this.weatherForecastRepository = weatherForecastRepository;
         this.logger = logger;
     }
-
-    [Authorize]
+        
     public IEnumerable<WeatherForecast> GetWeatherForecast()
     {
         logger.LogInformation("Getting weather forecasts");

@@ -1,6 +1,6 @@
 ﻿namespace Graphene.Server.Models;
 
-public class WeatherForecastRepository
+public class WeatherForecastRepository : IWeatherForecastRepository
 {
     readonly string[] summaries = new[]
     {

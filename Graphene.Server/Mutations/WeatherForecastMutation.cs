@@ -4,6 +4,7 @@ using HotChocolate.Subscriptions;
 
 namespace Graphene.Server.Mutations;
 
+[Authorize]
 [MutationType]
 public class WeatherForecastMutation
 {
@@ -14,7 +15,6 @@ public class WeatherForecastMutation
         this.weatherForecastRepository = weatherForecastRepository;
     }
 
-    [Authorize]
     public async Task<WeatherForecast> AddWeatherForecast(WeatherForecastInput weatherForecastInput, [Service] ITopicEventSender eventSender)
     {
         WeatherForecast weatherForecast = new(

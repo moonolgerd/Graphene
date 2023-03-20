@@ -11,6 +11,7 @@ var services = builder.Services;
 
 services.AddMemoryCache();
 
+services.AddSingleton<JokeService>();
 services.AddHostedService<BackgroundHostedService>();
 services.AddSingleton<WeatherForecastRepository>();
 
