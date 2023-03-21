@@ -24,4 +24,4 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       - name: Test
-        run: ls
+        run: dotnet test --no-build Graphene.Server.Tests/Graphene.Server.Tests.csproj
