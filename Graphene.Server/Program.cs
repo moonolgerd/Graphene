@@ -2,6 +2,7 @@ using Graphene.Server;
 using Graphene.Server.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Okta.AspNetCore;
+using Redis.OM;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ var services = builder.Services;
 
 services.AddMemoryCache();
 
+services.AddSingleton(new RedisConnectionProvider(builder.Configuration["ConnectionStrings:Redis"]!));
+services.AddHostedService<IndexCreationService>();
 services.AddSingleton<JokeService>();
 services.AddHostedService<BackgroundHostedService>();
 services.AddSingleton<WeatherForecastRepository>();

@@ -1,0 +1,25 @@
+﻿{
+  "Kind": "SingleResult",
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "addPerson": {
+      "id": "Alice:McGee",
+      "firstName": "Alice",
+      "lastName": "McGee",
+      "age": 17,
+      "personalStatement": null,
+      "address": {
+        "streetNumber": 4,
+        "streetName": "Main St",
+        "city": "New York"
+      }
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null
+}

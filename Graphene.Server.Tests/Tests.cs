@@ -1,5 +1,6 @@
 using Castle.Core.Logging;
 using Graphene.Server.Models;
+using Graphene.Server.Mutations;
 using Graphene.Server.Queries;
 using HotChocolate;
 using HotChocolate.Execution;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Redis.OM;
 using Snapshooter.NUnit;
 using System.Security.Claims;
 
@@ -59,47 +61,104 @@ query WeatherForecast {
     }
 
     [Test]
-    public async Task Joke_Test()
+    public async Task GetPeople_Test()
     {
-        // https://chillicream.com/blog/2019/04/11/integration-tests
-        var cache = new MemoryCache(new MemoryCacheOptions
-        {
-
-        });
-
         var authMock = Substitute.For<IAuthorizationService>();
 
         var authProviderMock = Substitute.For<IAuthorizationPolicyProvider>();
 
         var serviceCollection = new ServiceCollection();
         var provider = serviceCollection
-            .AddSingleton<JokeService>()
             .BuildServiceProvider();
 
         var executor = await new ServiceCollection()
-            .AddSingleton<IMemoryCache>(cache)
+            .AddSingleton(new RedisConnectionProvider("redis://localhost:6379"))
             .AddSingleton(authMock)
             .AddSingleton(authProviderMock)
-            .AddMemoryCache()
-            .AddHostedService<BackgroundHostedService>()
+            .AddHostedService<IndexCreationService>()
             .AddGraphQL()
-            .AddAuthorization()
+            //.AddAuthorization()
             .AddQueryType()
-            .AddTypeExtension<JokesQuery>()
+            .AddTypeExtension<PersonsQuery>()
             .BuildRequestExecutorAsync();
-
-        var bs = provider.GetRequiredService<JokeService>();
-        cache.Set("joke", bs.GetJoke());
 
         var query = QueryRequestBuilder.New()
             .SetQuery("""
-query Joke {
-    joke {
-        setup
-        punchline
+query GetPeople {
+    people {
+       id
+       firstName
+       lastName
+       age
+       personalStatement
+       address {
+           streetNumber
+           streetName
+           city
+           state
+           postalCode
+           country
+       }
     }
 }
 """)
+            .AddGlobalState(WellKnownContextData.UserState, new UserState(new ClaimsPrincipal(new ClaimsIdentity()), true))
+            .AddGlobalState("UserId", "Alice")
+            .Create();
+
+        var result = await executor.ExecuteAsync(query);
+
+        result.MatchSnapshot();
+    }
+
+    [TestCase("Alice", "McGee", 17, "Main St", 4, "New York")]
+    [TestCase("Alice", "Carroll", 10, "Broadway", 100, "London")]
+    public async Task AddPerson_Test(string firstName, string lastName, int age, string streetName, int streetNumber, string city)
+    {
+        var authMock = Substitute.For<IAuthorizationService>();
+
+        var authProviderMock = Substitute.For<IAuthorizationPolicyProvider>();
+
+        var serviceCollection = new ServiceCollection();
+        var provider = serviceCollection
+            .BuildServiceProvider();
+
+        var executor = await new ServiceCollection()
+            .AddSingleton(new RedisConnectionProvider("redis://localhost:6379"))
+            .AddSingleton(authMock)
+            .AddSingleton(authProviderMock)
+            .AddHostedService<IndexCreationService>()
+            .AddGraphQL()
+            //.AddAuthorization()
+            .AddQueryType()
+            .AddMutationType()
+            .AddTypeExtension<PersonsQuery>()
+            .AddTypeExtension<PersonsMutation>()
+            .BuildRequestExecutorAsync();
+
+        var query = QueryRequestBuilder.New()
+            .SetQuery("""
+mutation AddPerson($personInput: PersonInput!) {
+    addPerson(personInput: $personInput) {
+       id
+       firstName
+       lastName
+       age
+       personalStatement
+       address {
+           streetNumber
+           streetName
+           city
+       }
+    }
+}
+""")
+            .AddVariableValue("personInput", new PersonInput(firstName, lastName, age)
+            {
+                StreetName = streetName,
+                StreetNumber = streetNumber,
+                City = city
+            })
             .AddGlobalState(WellKnownContextData.UserState, new UserState(new ClaimsPrincipal(new ClaimsIdentity()), true))
             .AddGlobalState("UserId", "Alice")
             .Create();

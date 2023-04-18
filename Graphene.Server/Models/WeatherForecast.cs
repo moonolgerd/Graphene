@@ -1,4 +1,6 @@
-﻿namespace Graphene.Server.Models;
+﻿using Redis.OM.Modeling;
+
+namespace Graphene.Server.Models;
 
 public record WeatherForecast(string Date, int TemperatureC, string? Summary) : WeatherForecastInput(Date, TemperatureC, Summary)
 {

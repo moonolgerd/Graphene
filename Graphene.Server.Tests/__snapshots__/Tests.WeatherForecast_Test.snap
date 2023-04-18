@@ -1,0 +1,40 @@
+﻿{
+  "Kind": "SingleResult",
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "weatherForecast": [
+      {
+        "date": "4/18/2023 9:50:06 PM",
+        "temperatureC": 48,
+        "summary": "Scorching"
+      },
+      {
+        "date": "4/19/2023 9:50:06 PM",
+        "temperatureC": 19,
+        "summary": "Chilly"
+      },
+      {
+        "date": "4/20/2023 9:50:06 PM",
+        "temperatureC": -3,
+        "summary": "Scorching"
+      },
+      {
+        "date": "4/21/2023 9:50:06 PM",
+        "temperatureC": 48,
+        "summary": "Scorching"
+      },
+      {
+        "date": "4/22/2023 9:50:06 PM",
+        "temperatureC": 31,
+        "summary": "Scorching"
+      }
+    ]
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null
+}

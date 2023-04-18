@@ -1,0 +1,25 @@
+﻿{
+  "Kind": "SingleResult",
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "addPerson": {
+      "id": "Alice:Carroll",
+      "firstName": "Alice",
+      "lastName": "Carroll",
+      "age": 10,
+      "personalStatement": null,
+      "address": {
+        "streetNumber": 100,
+        "streetName": "Broadway",
+        "city": "London"
+      }
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null
+}

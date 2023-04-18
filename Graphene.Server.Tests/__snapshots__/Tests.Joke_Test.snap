@@ -1,0 +1,17 @@
+﻿{
+  "Kind": "SingleResult",
+  "Label": null,
+  "Path": null,
+  "Data": {
+    "joke": {
+      "setup": "What's the object-oriented way to become wealthy?",
+      "punchline": "Inheritance"
+    }
+  },
+  "Items": null,
+  "Errors": null,
+  "Extensions": null,
+  "Incremental": null,
+  "ContextData": null,
+  "HasNext": null
+}
