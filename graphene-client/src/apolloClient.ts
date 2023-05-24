@@ -25,7 +25,7 @@ const wsLink = new GraphQLWsLink(createClient({
   }));
 
 const httpLink = new HttpLink({
-    uri: 'https://localhost:7099/graphql/'
+    uri: 'http://localhost:5099/graphql/'
 })
 
 const splitLink = split(

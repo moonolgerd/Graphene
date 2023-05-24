@@ -22,8 +22,13 @@ public class WeatherForecastMutation
             weatherForecastInput.TemperatureC,
             weatherForecastInput.Summary);
 
-        weatherForecastRepository.AddWeatherForecast(weatherForecast);
+        await weatherForecastRepository.AddWeatherForecast(weatherForecast);
         await eventSender.SendAsync("WeatherForecastAdded", weatherForecast);
         return weatherForecast;
+    }
+
+    public async Task UpdateWeatherForecast(WeatherForecastInput weatherForecastInput)
+    {
+        await weatherForecastRepository.UpdateWeatherForecast(weatherForecastInput);
     }
 }

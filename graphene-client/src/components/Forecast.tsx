@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 export const FORECASTS = gql`
 query {
@@ -55,6 +55,11 @@ export interface NewForecastEvent {
 const WeatherForecast = () => {
   const { loading, error, data, subscribeToMore } = useQuery<WeatherForecastData>(FORECASTS)
 
+  const [date, setDate] = useState<Date>(new Date())
+  const [summary, setSummary] = useState<string>('Freezing')
+  const [temperatureC, setTemperatureC] = useState<number>(Math.round(Math.random() * 100))
+
+
   if (error) {
     console.error(error)
   }
@@ -82,24 +87,38 @@ const WeatherForecast = () => {
 
   const onAddClick = useCallback(() => {
 
-    const date = new Date().toUTCString()
-
+   
     const newForecast: ForecastInput = {
-      date: date,
-      summary: 'Freezing',
-      temperatureC: Math.round(Math.random() * 100)
+      date: date.toDateString(),
+      summary: summary,
+      temperatureC: temperatureC
     }
     sendForecast({
       variables: { forecast: newForecast }
     })
   }, [sendForecast])
 
-  const renderForecastsTable = (forecasts?: Forecast[]) => {
-
-    if (!forecasts)
+  if (!data)
       return <h2>No data</h2>
 
+  if (loading)
+    return <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
+
+
+    
     return (
+      <>
+
+      <h2 id="tabelLabel">Weather forecast</h2>
+
+      <form>
+        <input type="text" placeholder='Date' value={date.toDateString()} onChange={e => setDate(new Date(e.target.value))} />
+        <input type="text" placeholder='Summary' value={summary} onChange={e => setSummary(e.target.value)} />
+        <input type="text" placeholder='TemperatureC' value={temperatureC} onChange={e => setTemperatureC(parseInt(e.target.value))} />
+      </form>
+
+      <button type="button" onClick={onAddClick}>Add Forecast</button>
+      
       <table aria-labelledby="tabelLabel">
         <thead>
           <tr>
@@ -110,7 +129,7 @@ const WeatherForecast = () => {
           </tr>
         </thead>
         <tbody>
-          {forecasts!.map(forecast =>
+          {data && data.weatherForecast.map(forecast =>
             <tr key={forecast.date}>
               <td>{forecast.date}</td>
               <td>{forecast.temperatureC}</td>
@@ -120,22 +139,8 @@ const WeatherForecast = () => {
           )}
         </tbody>
       </table>
+      </>
     )
   }
-
-  let contents = loading
-    ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
-    : renderForecastsTable(data?.weatherForecast)
-
-  return (
-    <div>
-      <h2 id="tabelLabel">Weather forecast</h2>
-      <p>This component demonstrates fetching data from the server using GraphQL queries, mutations, and subscription</p>
-      <p>See <a href="http://localhost:5099/graphql" rel="noreferrer noopener" target="_blank">GraphQL playground</a></p>
-      <button type="button" onClick={onAddClick}>Add Forecast</button>
-      {contents}
-    </div>
-  )
-}
 
 export default WeatherForecast

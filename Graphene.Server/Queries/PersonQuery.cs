@@ -1,6 +1,5 @@
 ﻿using Graphene.Server.Models;
 using Redis.OM;
-using System;
 
 namespace Graphene.Server.Queries;
 

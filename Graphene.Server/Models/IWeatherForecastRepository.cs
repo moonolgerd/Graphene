@@ -1,8 +1,9 @@
 ﻿namespace Graphene.Server.Models
 {
-    public interface IWeatherForecastRepository
-    {
-        void AddWeatherForecast(WeatherForecast weatherForecast);
-        IEnumerable<WeatherForecast> GetWeatherForecasts();
-    }
+  public interface IWeatherForecastRepository
+  {
+    Task AddWeatherForecast(WeatherForecastInput weatherForecast);
+    Task UpdateWeatherForecast(WeatherForecastInput weatherForecast);
+    IEnumerable<WeatherForecast> GetWeatherForecasts();
+  }
 }

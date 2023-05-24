@@ -1,5 +1,6 @@
 import './App.css'
 import WeatherForecast from './components/Forecast'
+import People from './components/People'
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js'
 import { Security, useOktaAuth, LoginCallback } from '@okta/okta-react'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
@@ -38,6 +39,7 @@ const App = () => {
                 <nav>
                     <Link to="/">Home</Link>
                     <Link to="/weatherForecast">Weather Forecast</Link>
+                    <Link to="/people">People</Link>
                 </nav>
 
                 {/*<div>*/}
@@ -51,6 +53,7 @@ const App = () => {
                 <Route path="/weatherForecast" element={<RequiredAuth />}>
                     <Route path="" element={<WeatherForecast />} />
                 </Route>
+                <Route path="/people" element={<People /> } />
                 <Route path="/login/callback" element={<LoginCallback loadingElement={<Loading />} />} />
             </Routes>
         </Security>
