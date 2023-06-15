@@ -33,30 +33,35 @@ const App = () => {
     const logout = async () => await oktaAuth.signOut()
 
     return (
-        <Security oktaAuth={oktaAuth}
-            restoreOriginalUri={restoreOriginalUri}>
-            <div>
-                <nav>
-                    <Link to="/">Home</Link>
-                    <Link to="/weatherForecast">Weather Forecast</Link>
-                    <Link to="/people">People</Link>
-                </nav>
+        <div>
+            <div>Okta Issuer: {import.meta.env.VITE_OKTA_ISSUER}</div>
+            <div>Okta ClientID: {import.meta.env.VITE_OKTA_CLIENTID}</div>
+            <div>Version : {import.meta.env.PACKAGE_VERSION}</div>
+            <Security oktaAuth={oktaAuth}
+                restoreOriginalUri={restoreOriginalUri}>
+                <div>
+                    <nav>
+                        <Link to="/">Home</Link>
+                        <Link to="/weatherForecast">Weather Forecast</Link>
+                        <Link to="/people">People</Link>
+                    </nav>
 
-                {/*<div>*/}
-                {/*    {!authState?.isAuthenticated && <button onClick={login}>Log In</button>}*/}
-                {/*    {authState?.isAuthenticated && <button onClick={logout}>Log Out</button>}*/}
-                {/*</div>*/}
-            </div>
-            <button onClick={login}>Login</button>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/weatherForecast" element={<RequiredAuth />}>
-                    <Route path="" element={<WeatherForecast />} />
-                </Route>
-                <Route path="/people" element={<People /> } />
-                <Route path="/login/callback" element={<LoginCallback loadingElement={<Loading />} />} />
-            </Routes>
-        </Security>
+                    {/*<div>*/}
+                    {/*    {!authState?.isAuthenticated && <button onClick={login}>Log In</button>}*/}
+                    {/*    {authState?.isAuthenticated && <button onClick={logout}>Log Out</button>}*/}
+                    {/*</div>*/}
+                </div>
+                <button onClick={login}>Login</button>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/weatherForecast" element={<RequiredAuth />}>
+                        <Route path="" element={<WeatherForecast />} />
+                    </Route>
+                    <Route path="/people" element={<People /> } />
+                    <Route path="/login/callback" element={<LoginCallback loadingElement={<Loading />} />} />
+                </Routes>
+            </Security>
+        </div>
     )
 }
 
