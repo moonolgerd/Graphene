@@ -6,6 +6,7 @@ import {
     HttpLink,
     split,
 } from "@apollo/client"
+import fetch from 'cross-fetch'
 import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
 
@@ -22,19 +23,20 @@ const authLink = setContext((_, { headers }) => {
 
 const wsLink = new GraphQLWsLink(createClient({
     url: 'wss://localhost:7099/graphql/',
-  }));
+}))
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:5099/graphql/'
+    uri: 'http://localhost:5099/graphql/',
+    fetch
 })
 
 const splitLink = split(
     ({ query }) => {
-        const definition = getMainDefinition(query);
+        const definition = getMainDefinition(query)
         return (
             definition.kind === 'OperationDefinition' &&
             definition.operation === 'subscription'
-        );
+        )
     },
     wsLink,
     httpLink

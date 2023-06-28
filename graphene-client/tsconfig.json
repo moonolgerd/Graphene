@@ -1,18 +1,15 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "types": [
-      "vitest/globals"
-    ],
     "useDefineForClassFields": true,
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,

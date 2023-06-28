@@ -1,7 +1,9 @@
 // Vitest Snapshot v1
 
 exports[`App > renders weather forecast 1`] = `
-{
-  "foo": "bar",
-}
+<a
+  href="/weatherForecast"
+>
+  Weather Forecast
+</a>
 `;
