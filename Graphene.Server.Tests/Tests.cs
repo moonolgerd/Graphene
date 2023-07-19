@@ -32,11 +32,11 @@ public class Tests
 
         weatherForecastRepositoryMock.GetWeatherForecasts().Returns(new List<WeatherForecast>
         {
-            new WeatherForecast(DateTime.Now.ToShortDateString(), 48, "Scorching"),
-            new WeatherForecast(DateTime.Now.ToShortDateString(), 19, "Chilly"),
-            new WeatherForecast(DateTime.Now.ToShortDateString(), -3, "Sunny"),
-            new WeatherForecast(DateTime.Now.ToShortDateString(), 48, "Sunny"),
-            new WeatherForecast(DateTime.Now.ToShortDateString(), 31, "Scorching")
+            new WeatherForecast("01/01/2023", 48, "Scorching"),
+            new WeatherForecast("01/02/2023", 19, "Chilly"),
+            new WeatherForecast("01/03/2023", -3, "Sunny"),
+            new WeatherForecast("01/04/2023", 48, "Sunny"),
+            new WeatherForecast("01/05/2023", 31, "Scorching")
         });
 
         var executor = await new ServiceCollection()

@@ -5,27 +5,27 @@
   "Data": {
     "weatherForecast": [
       {
-        "date": "7/18/2023",
+        "date": "01/01/2023",
         "temperatureC": 48,
         "summary": "Scorching"
       },
       {
-        "date": "7/18/2023",
+        "date": "01/02/2023",
         "temperatureC": 19,
         "summary": "Chilly"
       },
       {
-        "date": "7/18/2023",
+        "date": "01/03/2023",
         "temperatureC": -3,
         "summary": "Sunny"
       },
       {
-        "date": "7/18/2023",
+        "date": "01/04/2023",
         "temperatureC": 48,
         "summary": "Sunny"
       },
       {
-        "date": "7/18/2023",
+        "date": "01/05/2023",
         "temperatureC": 31,
         "summary": "Scorching"
       }
