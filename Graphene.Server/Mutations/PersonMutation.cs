@@ -1,16 +1,14 @@
 ﻿using Graphene.Server.Models;
-using Redis.OM;
 
 namespace Graphene.Server.Mutations;
 
 [MutationType]
-public class PersonsMutation
+public class PersonMutation
 {
     public async Task<Person> AddPerson(
         PersonInput personInput,
-        [Service] RedisConnectionProvider provider)
+        [Service] IPersonRepository personRepository)
     {
-        var collection = provider.RedisCollection<Person>();
         var person = new Person
         {
             Id = $"{personInput.FirstName}:{personInput.LastName}",
@@ -25,37 +23,34 @@ public class PersonsMutation
             }
         };
 
-        await collection.InsertAsync(person);
+        await personRepository.AddPerson(person);
         return person;
     }
 
     public async Task<Person?> UpdatePerson(
          UpdatePersonInput personInput,
-        [Service] RedisConnectionProvider provider)
+        [Service] IPersonRepository personRepository)
     {
-        var collection = provider.RedisCollection<Person>();
-        var person = await collection.FindByIdAsync(personInput.Id);
+        var person = await personRepository.GetPersonById(personInput.Id);
         if (person == null)
             return null;
 
         person.Age = personInput.Age;
-        await collection.SaveAsync();
+        await personRepository.UpdatePerson(person);
 
         return person;
     }
 
-    public async Task DeletePerson(string Id,
-        [Service] RedisConnectionProvider provider)
+    public async Task DeletePerson(
+        string Id,
+        [Service] IPersonRepository personRepository)
     {
-        var collection = provider.RedisCollection<Person>();
-        var person = await collection.FindByIdAsync(Id);
+        var person = await personRepository.GetPersonById(Id);
 
         if (person == null)
             return;
 
-        await collection.DeleteAsync(person);
-
-        
+        await personRepository.DeletePerson(person);
     }
 }
 

@@ -17,6 +17,7 @@ services.AddHostedService<IndexCreationService>();
 services.AddSingleton<JokeService>();
 services.AddHostedService<BackgroundHostedService>();
 services.AddSingleton<WeatherForecastRepository>();
+services.AddSingleton<IPersonRepository, PersonRepository>();
 
 services.AddAuthentication(options =>
 {

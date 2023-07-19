@@ -5,7 +5,7 @@
   "Data": {
     "people": [
       {
-        "id": "Alice:McGee",
+        "id": null,
         "firstName": "Alice",
         "lastName": "McGee",
         "age": 17,

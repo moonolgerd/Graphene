@@ -36,7 +36,7 @@ const App = () => {
         <div>
             <div>Okta Issuer: {import.meta.env.VITE_OKTA_ISSUER}</div>
             <div>Okta ClientID: {import.meta.env.VITE_OKTA_CLIENTID}</div>
-            <div>Version : {import.meta.env.PACKAGE_VERSION}</div>
+            <div>Version : {import.meta.env.VITE_PACKAGE_VERSION}</div>
             <Security oktaAuth={oktaAuth}
                 restoreOriginalUri={restoreOriginalUri}>
                 <div>

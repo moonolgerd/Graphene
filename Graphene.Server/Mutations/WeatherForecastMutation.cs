@@ -31,4 +31,9 @@ public class WeatherForecastMutation
     {
         await weatherForecastRepository.UpdateWeatherForecast(weatherForecastInput);
     }
+
+    public async Task DeleteWeatherForecast(string Id)
+    {
+        await weatherForecastRepository.DeleteWeatherForecast(Id);
+    }
 }

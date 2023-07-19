@@ -5,27 +5,27 @@
   "Data": {
     "weatherForecast": [
       {
-        "date": "4/18/2023 9:50:06 PM",
+        "date": "7/18/2023",
         "temperatureC": 48,
         "summary": "Scorching"
       },
       {
-        "date": "4/19/2023 9:50:06 PM",
+        "date": "7/18/2023",
         "temperatureC": 19,
         "summary": "Chilly"
       },
       {
-        "date": "4/20/2023 9:50:06 PM",
+        "date": "7/18/2023",
         "temperatureC": -3,
-        "summary": "Scorching"
+        "summary": "Sunny"
       },
       {
-        "date": "4/21/2023 9:50:06 PM",
+        "date": "7/18/2023",
         "temperatureC": 48,
-        "summary": "Scorching"
+        "summary": "Sunny"
       },
       {
-        "date": "4/22/2023 9:50:06 PM",
+        "date": "7/18/2023",
         "temperatureC": 31,
         "summary": "Scorching"
       }

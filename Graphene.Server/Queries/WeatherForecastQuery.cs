@@ -17,7 +17,7 @@ public class WeatherForecastQuery
         this.logger = logger;
     }
         
-    public IEnumerable<WeatherForecast> GetWeatherForecast()
+    public Task<IEnumerable<WeatherForecast>> GetWeatherForecast()
     {
         logger.LogInformation("Getting weather forecasts");
         return weatherForecastRepository.GetWeatherForecasts();

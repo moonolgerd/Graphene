@@ -1,15 +1,12 @@
-using Castle.Core.Logging;
 using Graphene.Server.Models;
 using Graphene.Server.Mutations;
 using Graphene.Server.Queries;
 using HotChocolate;
 using HotChocolate.Execution;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Redis.OM;
 using Snapshooter.NUnit;
 using System.Security.Claims;
 
@@ -31,9 +28,20 @@ public class Tests
 
         var loggerSub = Substitute.For<ILogger<WeatherForecastQuery>>();
 
+        var weatherForecastRepositoryMock = Substitute.For<IWeatherForecastRepository>();
+
+        weatherForecastRepositoryMock.GetWeatherForecasts().Returns(new List<WeatherForecast>
+        {
+            new WeatherForecast(DateTime.Now.ToShortDateString(), 48, "Scorching"),
+            new WeatherForecast(DateTime.Now.ToShortDateString(), 19, "Chilly"),
+            new WeatherForecast(DateTime.Now.ToShortDateString(), -3, "Sunny"),
+            new WeatherForecast(DateTime.Now.ToShortDateString(), 48, "Sunny"),
+            new WeatherForecast(DateTime.Now.ToShortDateString(), 31, "Scorching")
+        });
+
         var executor = await new ServiceCollection()
             .AddSingleton(loggerSub)
-            .AddSingleton<IWeatherForecastRepository, WeatherForecastRepository>()
+            .AddSingleton(weatherForecastRepositoryMock)
             .AddSingleton(authMock)
             .AddSingleton(authProviderMock)
             .AddGraphQL()
@@ -54,7 +62,7 @@ query WeatherForecast {
 """)
             .AddGlobalState(WellKnownContextData.UserState, new UserState(new ClaimsPrincipal(new ClaimsIdentity()), true))
             .Create();
-                
+
         var result = await executor.ExecuteAsync(query);
 
         result.MatchSnapshot();
@@ -67,19 +75,35 @@ query WeatherForecast {
 
         var authProviderMock = Substitute.For<IAuthorizationPolicyProvider>();
 
+        var personRepositoryMock = Substitute.For<IPersonRepository>();
+
+        personRepositoryMock.GetAllPeople().Returns(new List<Person>
+        {
+            new Person
+            {
+                FirstName = "Alice",
+                LastName = "McGee",
+                Age = 17,
+                Address = new Address {
+                    StreetNumber = 4,
+                    StreetName = "Main St",
+                    City = "New York"
+                }
+            }
+        });
+
         var serviceCollection = new ServiceCollection();
         var provider = serviceCollection
             .BuildServiceProvider();
 
         var executor = await new ServiceCollection()
-            .AddSingleton(new RedisConnectionProvider("redis://localhost:6379"))
+            .AddSingleton(personRepositoryMock)
             .AddSingleton(authMock)
             .AddSingleton(authProviderMock)
             .AddHostedService<IndexCreationService>()
             .AddGraphQL()
-            //.AddAuthorization()
             .AddQueryType()
-            .AddTypeExtension<PersonsQuery>()
+            .AddTypeExtension<PersonQuery>()
             .BuildRequestExecutorAsync();
 
         var query = QueryRequestBuilder.New()
@@ -119,21 +143,22 @@ query GetPeople {
 
         var authProviderMock = Substitute.For<IAuthorizationPolicyProvider>();
 
+        var personRepositoryMock = Substitute.For<IPersonRepository>();
+
         var serviceCollection = new ServiceCollection();
         var provider = serviceCollection
             .BuildServiceProvider();
 
         var executor = await new ServiceCollection()
-            .AddSingleton(new RedisConnectionProvider("redis://localhost:6379"))
+            .AddSingleton(personRepositoryMock)
             .AddSingleton(authMock)
             .AddSingleton(authProviderMock)
             .AddHostedService<IndexCreationService>()
             .AddGraphQL()
-            //.AddAuthorization()
             .AddQueryType()
             .AddMutationType()
-            .AddTypeExtension<PersonsQuery>()
-            .AddTypeExtension<PersonsMutation>()
+            .AddTypeExtension<PersonQuery>()
+            .AddTypeExtension<PersonMutation>()
             .BuildRequestExecutorAsync();
 
         var query = QueryRequestBuilder.New()

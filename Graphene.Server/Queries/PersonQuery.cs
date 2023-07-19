@@ -1,16 +1,10 @@
 ﻿using Graphene.Server.Models;
-using Redis.OM;
 
 namespace Graphene.Server.Queries;
 
 [QueryType]
-public class PersonsQuery
+public class PersonQuery
 {
     public async Task<IEnumerable<Person>> GetPeopleAsync(
-        [Service] RedisConnectionProvider provider)
-    {
-        var collection = provider.RedisCollection<Person>();
-        var list = await collection.ToListAsync();
-        return list;
-    }
+        [Service] IPersonRepository personRepository) => await personRepository.GetAllPeople();
 }
