@@ -30,9 +30,12 @@ jobs:
         with:
           node-version: "18"
       - name: Install dependencies
+        working-directory: ./graphene-client
         run: npm install
       - name: Build client
+        working-directory: ./graphene-client
         run: npm run build
       - name: Test Client
+        working-directory: ./graphene-client  
         run: npm run test
   
