@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: ["master"]
 
+env:
+    VITE_OKTA_CLIENTID: $VITE_OKTA_CLIENTID
+    VITE_OKTA_ISSUER: $VITE_OKTA_ISSUER
+
 jobs:
   build:
     runs-on: ubuntu-latest
