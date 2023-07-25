@@ -26,9 +26,9 @@ jobs:
       - name: Test
         run: dotnet test --no-build Graphene.Server.Tests/Graphene.Server.Tests.csproj
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "latest"
       - name: Install dependencies
         working-directory: ./graphene-client
         run: npm install
