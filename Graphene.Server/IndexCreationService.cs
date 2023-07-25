@@ -1,13 +1,14 @@
 ﻿using Graphene.Server.Models;
 using Redis.OM;
+using Redis.OM.Contracts;
 using System;
 
 namespace Graphene.Server;
 
 public class IndexCreationService : IHostedService
 {
-    private readonly RedisConnectionProvider _provider;
-    public IndexCreationService(RedisConnectionProvider provider)
+    private readonly IRedisConnectionProvider _provider;
+    public IndexCreationService(IRedisConnectionProvider provider)
     {
         _provider = provider;
     }
