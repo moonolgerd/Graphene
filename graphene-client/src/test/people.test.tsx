@@ -15,8 +15,8 @@ const mockData: PersonData = {
       personalStatement: undefined,
       address: {
         city: 'San Francisco',
-        stringName: 'Market St',
-        stringNumber: 123
+        streetName: 'Market St',
+        streetNumber: 123
       }
     },
     {
@@ -27,8 +27,8 @@ const mockData: PersonData = {
       personalStatement: undefined,
       address: {
         city: 'San Francisco',
-        stringName: 'Market St',
-        stringNumber: 123
+        streetName: 'Market St',
+        streetNumber: 123
       }
     }
   ]

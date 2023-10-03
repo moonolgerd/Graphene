@@ -2,8 +2,8 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import { useCallback, useState } from "react"
 
 export interface Address {
-    stringNumber: number
-    stringName: string
+    streetNumber: number
+    streetName: string
     city: string
 }
 
@@ -12,7 +12,7 @@ export interface Person {
     firstName: string
     lastName: string
     age: number
-    personalStatement: any
+    personalStatement?: string
     address?: Address
 }
 
@@ -21,7 +21,7 @@ export interface PersonInput {
     lastName: string
     age: number
     city: string
-    streetName : string
+    streetName: string
     streetNumber: number
 }
 
@@ -84,12 +84,12 @@ const People = () => {
             city: city,
             streetName: streetName,
             streetNumber: streetNumber
-          } 
-    
+        }
+
         addPerson({
-          variables: { personInput }
+            variables: { personInput }
         })
-      }, [addPerson])
+    }, [addPerson])
 
     if (error)
         return <div>{error.message}</div>
@@ -99,41 +99,41 @@ const People = () => {
 
     return (
         <>
-        <h2>
-            People
-        </h2>
+            <h2>
+                People
+            </h2>
 
-        <form>
-            <input type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} />
-            <input type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} />
-            <input type="text" placeholder="Age" value={age} onChange={e => setAge(parseInt(e.target.value))} />
-            <input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} />
-            <input type="text" placeholder="Street Name" value={streetName} onChange={e => setStreetName(e.target.value)} />
-            <input type="text" placeholder="Street Number" value={streetNumber} onChange={e => setStreetNumber(parseInt(e.target.value))} />
-        </form>
+            <form>
+                <input type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} />
+                <input type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} />
+                <input type="text" placeholder="Age" value={age} onChange={e => setAge(parseInt(e.target.value))} />
+                <input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} />
+                <input type="text" placeholder="Street Name" value={streetName} onChange={e => setStreetName(e.target.value)} />
+                <input type="text" placeholder="Street Number" value={streetNumber} onChange={e => setStreetNumber(parseInt(e.target.value))} />
+            </form>
 
-        <button onClick={onAddClick}>Add Person</button>
+            <button onClick={onAddClick}>Add Person</button>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Age</th>
-                    <th>Address</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data &&
-                    data.people.map(person => (
-                        <tr key={person.id}>
-                            <td>{person.firstName}</td>
-                            <td>{person.lastName}</td>
-                            <td>{person.age}</td>
-                            <td>{person.address?.city}</td>
-                        </tr>
-                    ))
-                }
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data &&
+                        data.people.map(person => (
+                            <tr key={person.id}>
+                                <td>{person.firstName}</td>
+                                <td>{person.lastName}</td>
+                                <td>{person.age}</td>
+                                <td>{person.address?.city}</td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </>
