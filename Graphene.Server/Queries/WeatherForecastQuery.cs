@@ -1,3 +1,6 @@
+using Dapr.Actors;
+using Dapr.Actors.Client;
+using Graphene.Server.Actors;
 using Graphene.Server.Models;
 using HotChocolate.Authorization;
 
@@ -7,19 +10,18 @@ namespace Graphene.Server.Queries;
 [Authorize]
 public class WeatherForecastQuery
 {
-    private readonly IWeatherForecastRepository weatherForecastRepository;
     private readonly ILogger<WeatherForecastQuery> logger;
 
-    public WeatherForecastQuery(IWeatherForecastRepository weatherForecastRepository,
-        ILogger<WeatherForecastQuery> logger)
+    public WeatherForecastQuery(ILogger<WeatherForecastQuery> logger)
     {
-        this.weatherForecastRepository = weatherForecastRepository;
         this.logger = logger;
     }
         
-    public Task<IEnumerable<WeatherForecast>> GetWeatherForecast()
+    public async Task<IEnumerable<WeatherForecast>> GetWeatherForecast(
+        [Service] IActorProxyFactory actorProxyFactory)
     {
+        var weatherForecastActor = actorProxyFactory.CreateActorProxy<IWeatherForecastActor>(new ActorId("WeatherForecastActor"), nameof(WeatherForecastActor));
         logger.LogInformation("Getting weather forecasts");
-        return weatherForecastRepository.GetWeatherForecasts();
+        return await weatherForecastActor.GetWeatherForecastsAsync(5);
     }
 }

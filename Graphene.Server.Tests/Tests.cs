@@ -1,3 +1,6 @@
+using Dapr.Actors.Client;
+using Google.Protobuf.WellKnownTypes;
+using Graphene.Server.Actors;
 using Graphene.Server.Models;
 using Graphene.Server.Mutations;
 using Graphene.Server.Queries;
@@ -28,22 +31,26 @@ public class Tests
 
         var loggerSub = Substitute.For<ILogger<WeatherForecastQuery>>();
 
-        var weatherForecastRepositoryMock = Substitute.For<IWeatherForecastRepository>();
+        var actorFactory = Substitute.For<IActorProxyFactory>();
+        var weatherActor = Substitute.For<IWeatherForecastActor>();
+        actorFactory
+            .CreateActorProxy<IWeatherForecastActor>(new Dapr.Actors.ActorId("WeatherForecastActor"), nameof(WeatherForecastActor))
+            .Returns(weatherActor);
 
-        weatherForecastRepositoryMock.GetWeatherForecasts().Returns(new List<WeatherForecast>
+        weatherActor.GetWeatherForecastsAsync(5).Returns(new List<WeatherForecast>
         {
-            new WeatherForecast("01/01/2023", 48, "Scorching"),
-            new WeatherForecast("01/02/2023", 19, "Chilly"),
-            new WeatherForecast("01/03/2023", -3, "Sunny"),
-            new WeatherForecast("01/04/2023", 48, "Sunny"),
-            new WeatherForecast("01/05/2023", 31, "Scorching")
+            new("01/01/2023", 48, "Scorching"),
+            new("01/02/2023", 19, "Chilly"),
+            new("01/03/2023", -3, "Sunny"),
+            new("01/04/2023", 48, "Sunny"),
+            new("01/05/2023", 31, "Scorching")
         });
 
         var executor = await new ServiceCollection()
             .AddSingleton(loggerSub)
-            .AddSingleton(weatherForecastRepositoryMock)
             .AddSingleton(authMock)
             .AddSingleton(authProviderMock)
+            .AddSingleton(actorFactory)
             .AddGraphQL()
             .AddAuthorization()
             .AddQueryType()
@@ -143,14 +150,18 @@ query GetPeople {
 
         var authProviderMock = Substitute.For<IAuthorizationPolicyProvider>();
 
-        var personRepositoryMock = Substitute.For<IPersonRepository>();
+        var actorFactory = Substitute.For<IActorProxyFactory>();
+        var personActor = Substitute.For<IPersonActor>();
+        actorFactory
+            .CreateActorProxy<IPersonActor>(new Dapr.Actors.ActorId("PersonActor"), nameof(PersonActor))
+            .Returns(personActor);
 
         var serviceCollection = new ServiceCollection();
         var provider = serviceCollection
             .BuildServiceProvider();
 
         var executor = await new ServiceCollection()
-            .AddSingleton(personRepositoryMock)
+            .AddSingleton(actorFactory)
             .AddSingleton(authMock)
             .AddSingleton(authProviderMock)
             .AddHostedService<IndexCreationService>()
