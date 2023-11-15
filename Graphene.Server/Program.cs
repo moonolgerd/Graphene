@@ -34,13 +34,11 @@ services.AddAuthentication(options =>
     });
 
 
-services.AddAuthorization(options =>
-{
-    options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+services.AddAuthorizationBuilder()
+    .AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
     {
         policy.RequireClaim(ClaimTypes.Name);
     });
-});
 
 services.AddGraphQLServer()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
@@ -54,6 +52,9 @@ services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
