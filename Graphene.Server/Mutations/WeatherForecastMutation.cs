@@ -6,14 +6,9 @@ namespace Graphene.Server.Mutations;
 
 [Authorize]
 [MutationType]
-public class WeatherForecastMutation
+public class WeatherForecastMutation(WeatherForecastRepository weatherForecastRepository)
 {
-    private readonly WeatherForecastRepository weatherForecastRepository;
-
-    public WeatherForecastMutation(WeatherForecastRepository weatherForecastRepository)
-    {
-        this.weatherForecastRepository = weatherForecastRepository;
-    }
+    private readonly WeatherForecastRepository weatherForecastRepository = weatherForecastRepository;
 
     public async Task<WeatherForecast> AddWeatherForecast(WeatherForecastInput weatherForecastInput, [Service] ITopicEventSender eventSender)
     {
