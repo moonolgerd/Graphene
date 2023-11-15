@@ -1,3 +1,6 @@
+using Dapr.Actors;
+using Dapr.Actors.Client;
+using Graphene.Server.Actors;
 using Graphene.Server.Models;
 using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
@@ -8,32 +11,38 @@ namespace Graphene.Server.Mutations;
 [MutationType]
 public class WeatherForecastMutation
 {
-    private readonly WeatherForecastRepository weatherForecastRepository;
-
-    public WeatherForecastMutation(WeatherForecastRepository weatherForecastRepository)
+    public WeatherForecastMutation()
     {
-        this.weatherForecastRepository = weatherForecastRepository;
     }
 
-    public async Task<WeatherForecast> AddWeatherForecast(WeatherForecastInput weatherForecastInput, [Service] ITopicEventSender eventSender)
+    public async Task<WeatherForecast> AddWeatherForecast(WeatherForecastInput weatherForecastInput, [Service] ITopicEventSender eventSender,
+        [Service] IActorProxyFactory actorProxyFactory)
     {
         WeatherForecast weatherForecast = new(
             weatherForecastInput.Date,
             weatherForecastInput.TemperatureC,
             weatherForecastInput.Summary);
 
-        await weatherForecastRepository.AddWeatherForecast(weatherForecast);
+        var actor = actorProxyFactory.CreateActorProxy<IWeatherForecastActor>(new ActorId(weatherForecast.Date), nameof(WeatherForecastActor));
+
+        await actor.AddWeatherForecast(weatherForecast);
         await eventSender.SendAsync("WeatherForecastAdded", weatherForecast);
         return weatherForecast;
     }
 
-    public async Task UpdateWeatherForecast(WeatherForecastInput weatherForecastInput)
+    public async Task UpdateWeatherForecast(WeatherForecastInput weatherForecastInput,
+        [Service] IActorProxyFactory actorProxyFactory)
     {
-        await weatherForecastRepository.UpdateWeatherForecast(weatherForecastInput);
+        var actor = actorProxyFactory.CreateActorProxy<IWeatherForecastActor>(new ActorId(weatherForecastInput.Date), nameof(WeatherForecastActor));
+
+        await actor.UpdateWeatherForecast(weatherForecastInput);
     }
 
-    public async Task DeleteWeatherForecast(string Id)
+    public async Task DeleteWeatherForecast(string id,
+        [Service] IActorProxyFactory actorProxyFactory)
     {
-        await weatherForecastRepository.DeleteWeatherForecast(Id);
+        var actor = actorProxyFactory.CreateActorProxy<IWeatherForecastActor>(new ActorId(id), nameof(WeatherForecastActor));
+
+        await actor.DeleteWeatherForecast(id);
     }
 }

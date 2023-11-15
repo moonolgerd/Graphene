@@ -1,4 +1,5 @@
 using Graphene.Server;
+using Graphene.Server.Actors;
 using Graphene.Server.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Okta.AspNetCore;
@@ -10,6 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var services = builder.Services;
+
+builder.Services.AddDaprClient();
+builder.Services.AddDaprSidekick();
+
+builder.Services.AddActors(options =>
+{
+    options.Actors.RegisterActor<PersonActor>();
+    options.Actors.RegisterActor<WeatherForecastActor>();
+});
 
 services.AddMemoryCache();
 
@@ -68,5 +78,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGraphQL();
+
+app.MapActorsHandlers();
 
 app.Run();
