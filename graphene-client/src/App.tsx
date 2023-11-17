@@ -2,7 +2,7 @@ import './App.css'
 import WeatherForecast from './components/Forecast'
 import People from './components/People'
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js'
-import { Security, useOktaAuth, LoginCallback } from '@okta/okta-react'
+import { Security, LoginCallback } from '@okta/okta-react'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import { Loading } from './components/Loading'
 import { Home } from './components/Home'
@@ -30,7 +30,7 @@ const App = () => {
     }
 
     const login = async () => await oktaAuth.signInWithRedirect({ originalUri: "/" })
-    const logout = async () => await oktaAuth.signOut()
+    //const logout = async () => await oktaAuth.signOut()
 
     return (
         <div>

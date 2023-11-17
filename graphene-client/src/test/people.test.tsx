@@ -1,8 +1,7 @@
-import { render, screen, waitFor, userEvent } from '../utils/test-utils'
+import { render, screen, waitFor } from '../utils/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { MockedProvider } from '@apollo/client/testing'
 import { GetPeople, PersonData } from '../components/People'
-import { AddPerson, PersonInput } from '../components/People'
 import People from '../components/People'
 
 const mockData: PersonData = {
@@ -32,37 +31,6 @@ const mockData: PersonData = {
       }
     }
   ]
-}
-
-const mockAddPerson = vi.fn()
-
-const mockMutation = {
-  request: {
-    query: AddPerson,
-    variables: {
-      personInput: {
-        firstName: 'Test',
-        lastName: 'Person',
-        age: 40,
-        city: 'San Francisco',
-        streetName: 'Market St',
-        streetNumber: 789
-      }
-    }
-  },
-  result: {
-    data: {
-      addPerson: {
-        id: '3',
-        firstName: 'Test',
-        lastName: 'Person',
-        age: 40,
-        city: 'San Francisco',
-        streetName: 'Market St',
-        streetNumber: 789
-      }
-    }
-  }
 }
 
 const mockError = new Error('Something went wrong')
