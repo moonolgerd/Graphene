@@ -1,4 +1,4 @@
-import { render, screen, userEvent } from './utils/test-utils'
+import { render, screen } from './utils/test-utils'
 import { describe, expect, it } from 'vitest'
 import App from './App'
 import { apolloClient } from './apolloClient'

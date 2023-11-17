@@ -5,13 +5,11 @@ namespace Graphene.Server.Queries;
 
 [QueryType]
 [Authorize]
-public class WeatherForecastQuery(IWeatherForecastRepository weatherForecastRepository,
-    ILogger<WeatherForecastQuery> logger)
+public class WeatherForecastQuery(ILogger<WeatherForecastQuery> logger)
 {
-    private readonly IWeatherForecastRepository weatherForecastRepository = weatherForecastRepository;
     private readonly ILogger<WeatherForecastQuery> logger = logger;
 
-    public Task<IEnumerable<WeatherForecast>> GetWeatherForecast()
+    public Task<IEnumerable<WeatherForecast>> GetWeatherForecast([Service] IWeatherForecastRepository weatherForecastRepository)
     {
         logger.LogInformation("Getting weather forecasts");
         return weatherForecastRepository.GetWeatherForecasts();
