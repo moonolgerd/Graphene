@@ -3,7 +3,7 @@ using HotChocolate.Authorization;
 
 namespace Graphene.Server.Subscriptions;
 
-[Authorize]
+//[Authorize]
 [SubscriptionType]
 public class WeatherForecastSubscription
 {

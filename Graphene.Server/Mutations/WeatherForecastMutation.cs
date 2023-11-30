@@ -4,7 +4,7 @@ using HotChocolate.Subscriptions;
 
 namespace Graphene.Server.Mutations;
 
-[Authorize]
+//[Authorize]
 [MutationType]
 public class WeatherForecastMutation(WeatherForecastRepository weatherForecastRepository)
 {

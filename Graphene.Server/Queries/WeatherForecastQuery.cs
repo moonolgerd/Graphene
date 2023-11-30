@@ -4,7 +4,7 @@ using HotChocolate.Authorization;
 namespace Graphene.Server.Queries;
 
 [QueryType]
-[Authorize]
+//[Authorize]
 public class WeatherForecastQuery(ILogger<WeatherForecastQuery> logger)
 {
     private readonly ILogger<WeatherForecastQuery> logger = logger;

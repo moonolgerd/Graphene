@@ -5,6 +5,10 @@ using Okta.AspNetCore;
 using Redis.OM;
 using Redis.OM.Contracts;
 using System.Security.Claims;
+using Graphene.Server.Queries;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,30 +24,52 @@ services.AddHostedService<BackgroundHostedService>();
 services.AddSingleton<IWeatherForecastRepository, WeatherForecastRepository>();
 services.AddSingleton<IPersonRepository, PersonRepository>();
 
-services.AddAuthentication(options =>
+services.AddSingleton(sp =>
 {
-    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
-    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
-    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
-})
-    .AddOktaWebApi(new OktaWebApiOptions()
+    const string connectionString = "mongodb://localhost";
+    var mongoConnectionUrl = new MongoUrl(connectionString);
+    var mongoClientSettings = MongoClientSettings.FromUrl(mongoConnectionUrl);
+    mongoClientSettings.ClusterConfigurator = cb =>
     {
-        OktaDomain = builder.Configuration["Authentication:Okta:OktaDomain"],
-        AuthorizationServerId = "default",
-        Audience = "api://default"
-    });
+        // This will print the executed command to the console
+        cb.Subscribe<CommandStartedEvent>(e =>
+        {
+            Console.WriteLine($"{e.CommandName} - {e.Command.ToJson()}");
+        });
+    };
+    var client = new MongoClient(mongoClientSettings);
+    var database = client.GetDatabase("test");
+    return database.GetCollection<Movie>("movies");
+});
 
-
-services.AddAuthorizationBuilder()
-    .AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
-    {
-        policy.RequireClaim(ClaimTypes.Name);
-    });
+// services.AddAuthentication(options =>
+// {
+//     options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+//     options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+//     options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+// })
+//     .AddOktaWebApi(new OktaWebApiOptions()
+//     {
+//         OktaDomain = builder.Configuration["Authentication:Okta:OktaDomain"],
+//         AuthorizationServerId = "default",
+//         Audience = "api://default"
+//     });
+//
+//
+// services.AddAuthorizationBuilder()
+//     .AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+//     {
+//         policy.RequireClaim(ClaimTypes.Name);
+//     });
 
 services.AddGraphQLServer()
     .AddHttpRequestInterceptor<HttpRequestInterceptor>()
-    .AddAuthorization()
+    //.AddAuthorization()
     .AddTypes()
+    .AddMongoDbFiltering()
+    .AddMongoDbSorting()
+    .AddMongoDbProjections()
+    .AddMongoDbPagingProviders()
     .AddInMemorySubscriptions();
 
 services.AddCors(options =>
@@ -65,8 +91,8 @@ app.UseWebSockets()
 
 app.UseCors("AllowAll");
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.MapGraphQL();
 
