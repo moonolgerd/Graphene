@@ -1,9 +1,8 @@
 ﻿using Redis.OM.Modeling;
-using System.Net;
 
 namespace Graphene.Server.Models;
 
-[Document(StorageType = StorageType.Json, Prefixes = new[] { "Person" })]
+[Document(StorageType = StorageType.Json, Prefixes = ["Person"])]
 public record Person
 {
     [RedisIdField][Indexed] public string? Id { get; set; }
@@ -16,7 +15,7 @@ public record Person
 
     [Searchable] public string? PersonalStatement { get; set; }
 
-    [Indexed] public string[] Skills { get; set; } = Array.Empty<string>();
+    [Indexed] public string[] Skills { get; set; } = [];
 
     [Indexed(CascadeDepth = 1)] public Address? Address { get; set; }
 

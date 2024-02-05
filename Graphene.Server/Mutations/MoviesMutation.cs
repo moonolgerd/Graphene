@@ -11,8 +11,8 @@ public class MoviesMutation
         CreateMovieInput input)
     {
         var movie = new Movie(Guid.NewGuid(), input.Title, input.Year, input.Rated,
-            input.Runtime, input.Directors.ToArray(), input.Genres.ToArray(),
-            input.Cast.ToArray());
+            input.Runtime, [.. input.Directors], [.. input.Genres],
+            [.. input.Cast]);
 
         await collection.InsertOneAsync(movie);
 
